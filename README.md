@@ -28,7 +28,7 @@ Munch-ACLs -Users "admin1","admin2" -Groups "Admins" -OUT
 ```
 **Check who has privileges over specified subjects:**
 ```powershell
-Munch-ACLs -Users "CEO_User" -IN -Verbose
+Munch-ACLs -Users "CEO_User" -IN
 ```
 **Custom privilege check with stealth options**
 ```powershell
@@ -90,7 +90,7 @@ Munch-ACLs -Domain "child.domain.com" -Groups "CrossDomainAdmins" -OUT
 
 ### Full Stealth Mode
 ```powershell
-Munch-ACLs -Users "RedTeam" -Jitter 1000 -BatchSize 5 -Verbose
+Munch-ACLs -Users "RedTeam" -Jitter 1000 -BatchSize 5
 ```
 
 ### Export Results
