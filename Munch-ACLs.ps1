@@ -232,7 +232,7 @@ function Munch-ACLs {
                     $_.SubjectName.PadRight(5),
                     $($_.ObjectType -split "->" | Select-Object -Last 1),
                     $_.ObjectName.PadRight(5),
-                    $_.Rights) -ForegroundColor Cyan
+                    $_.Rights) -ForegroundColor White
             }
         }
 
