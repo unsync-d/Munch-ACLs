@@ -1,5 +1,5 @@
 # Munch-ACLs: Active Directory ACL Enumeration Tool
-This cmdlet was created while studying for the Altered Security's CRTE exam. It provides a method to easily list the most relevant ACLs that allow compromised users to interact with other AD objects. Besides BloodHound, I didn't find any other tools that would retrieve this information in a concise way. 
+This cmdlet was created while studying for the Altered Security's CRTE exam. It provides a method to easily list the most relevant ACLs that allow compromised users to interact with other AD objects. Besides BloodHound and Find-InterestingDomainAcl from PowerView with filters applied, I don't know of any tools that do this in a concise way. Hence, I used this opportunit to better understand how ACLs work. The things that I tried to prioritize while writing this cmdlet were readability and ease of use.
 
 ![PowerShell Version](https://img.shields.io/badge/PowerShell-5.1+-blue.svg)
 [![AD Module Required](https://img.shields.io/badge/Requires-AD--Module-green.svg)]()
