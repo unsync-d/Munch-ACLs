@@ -217,9 +217,9 @@ function Munch-ACLs {
             $highRisk | ForEach-Object {
                 Write-Host ("[{0}] {1} -> [{2}] {3} : {4}" -f 
                     $_.SubjectType,
-                    $_.SubjectName.PadRight(5),
+                    $_.SubjectName.PadRight(20),
                     $($_.ObjectType -split "->" | Select-Object -Last 1),
-                    $_.ObjectName.PadRight(5),
+                    $_.ObjectName.PadRight(20),
                     $_.Rights) -ForegroundColor Red
             }
         }
@@ -229,9 +229,9 @@ function Munch-ACLs {
             $other | ForEach-Object {
                 Write-Host ("[{0}] {1} -> [{2}] {3} : {4}" -f 
                     $_.SubjectType,
-                    $_.SubjectName.PadRight(5),
+                    $_.SubjectName.PadRight(20),
                     $($_.ObjectType -split "->" | Select-Object -Last 1),
-                    $_.ObjectName.PadRight(5),
+                    $_.ObjectName.PadRight(20),
                     $_.Rights) -ForegroundColor White
             }
         }
