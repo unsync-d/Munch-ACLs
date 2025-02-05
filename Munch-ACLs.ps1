@@ -152,8 +152,10 @@ function Munch-ACLs {
                                                                 else { "N/A" }
                     }
                 }
+
             }
         }
+
         return $results
     }
 
@@ -205,61 +207,63 @@ function Munch-ACLs {
         #Write-Host $Results
         # Split into high-risk and normal results
         $highRisk = $Results | Where-Object {
-            $_.Rights -match "GenericAll|WriteDacl|WriteOwner|AllExtendedRights"
+            ($_.Rights -split ',\s*') -match '^(GenericAll|GenericWrite|WriteDacl|WriteOwner|AllExtendedRights)$'
         }
 
         $other =  $Results | Where-Object {
-            (($_.ActiveDirectoryRights -split ',\s*') | Where-Object { @("GenericAll", "WriteDacl", "WriteOwner", "AllExtendedRights") -notcontains $_ }) 
+            (($_.ActiveDirectoryRights -split ',\s*') | Where-Object { 
+                @("GenericAll", "GenericWrite", "WriteDacl", "WriteOwner", "AllExtendedRights") -notcontains $_ 
+            }) 
         }
 
         if ($highRisk) {
             Write-Host "`n=== HIGH RISK PERMISSIONS ===" -ForegroundColor Red
             $highRisk | ForEach-Object {
-                Write-Host ("[{0}] {1} -> [{2}] {3} : {4}" -f 
-                    $_.SubjectType,
+                Write-Host ("[{0}] {1} -> [{2}] {3} : {4}`n" -f 
+                    $_.SubjectType.PadRight(5),
                     $_.SubjectName.PadRight(20),
-                    $($_.ObjectType -split "->" | Select-Object -Last 1),
-                    $_.ObjectName.PadRight(20),
+                    $($_.ObjectType -split "->" | Select-Object -Last 1).PadRight(10),
+                    $_.ObjectName.PadRight(15),
                     $_.Rights) -ForegroundColor Red
             }
         }
 
         if ($other) {
-            Write-Host "`n=== OTHER PERMISSIONS ===" -ForegroundColor Cyan
+            Write-Host "=== OTHER PERMISSIONS ===" -ForegroundColor Cyan
             $other | ForEach-Object {
-                Write-Host ("[{0}] {1} -> [{2}] {3} : {4}" -f 
-                    $_.SubjectType,
+                Write-Host ("[{0}] {1} -> [{2}] {3} : {4}`n`n" -f 
+                    $_.SubjectType.PadRight(5),
                     $_.SubjectName.PadRight(20),
-                    $($_.ObjectType -split "->" | Select-Object -Last 1),
-                    $_.ObjectName.PadRight(20),
+                    $($_.ObjectType -split "->" | Select-Object -Last 1).PadRight(10),
+                    $_.ObjectName.PadRight(15),
                     $_.Rights) -ForegroundColor White
             }
         }
 
         # Summary table
-        Write-Host "`n=== SUMMARY TABLE ===" -ForegroundColor Green
-        $Results | Sort-Object SubjectName | Format-Table -AutoSize -Wrap @{
-            Label = "Subject"
-            Expression = { $_.SubjectName }
-        },@{
-            Label = "SubjectType"
-            Expression = { $_.SubjectType }
-        }, @{
-            Label = "Target"
-            Expression = { $_.ObjectName }
-        }, @{
-            Label = "TargetType"
-            Expression = { $_.ObjectType  }
-        }, @{
-            Label = "Permission"
-            Expression = { 
-                if ($_.Rights -match "GenericAll|WriteDacl") { 
-                    "$($_.Rights) !!" 
-                } else { 
-                    $_.Rights 
-                }
-            }
-        }
+        #Write-Host "`n=== SUMMARY TABLE ===" -ForegroundColor Green
+        #$Results | Sort-Object SubjectName | Format-Table -AutoSize -Wrap @{
+        #    Label = "Subject"
+        #    Expression = { $_.SubjectName }
+        #},@{
+        #    Label = "SubjectType"
+        #    Expression = { $_.SubjectType }
+        #}, @{
+        #    Label = "Target"
+        #    Expression = { $_.ObjectName }
+        #}, @{
+        #    Label = "TargetType"
+        #    Expression = { $_.ObjectType  }
+        #}, @{
+        #    Label = "Permission"
+        #    Expression = { 
+        #        if ($_.Rights -match "GenericAll|WriteDacl") { 
+        #            "$($_.Rights) !!" 
+        #        } else { 
+        #            $_.Rights 
+        #        }
+        #    }
+        #}
     }
 
     function Resolve-GUID {
